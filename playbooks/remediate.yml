@@ -9,6 +9,17 @@
       - leapp_firewalld_allowzonedrifting
       - leapp_missing_pkg
   tasks:
+    - name: Install vdo package
+      ansible.builtin.package:
+        name: vdo
+        state: present
+    
+    - name: AllowZoneDrifiting is removed in RHEL9
+      ansible.builtin.replace:
+        path: /etc/firewalld/firewalld.conf
+        regexp: '^AllowZoneDrifting=.*$'
+        replace: "AllowZoneDrifting=no"
+
     - name: Although bad practice, if PermitRootLogin yes is set, add a comment to it
       ansible.builtin.replace:
         path: /etc/ssh/sshd_config
